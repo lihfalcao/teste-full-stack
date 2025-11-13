@@ -1,0 +1,55 @@
+<div class="multiselect-container" #dropdown>
+  <div class="multiselect-trigger" (click)="toggleDropdown()">
+    <div class="selected-items">
+      <span
+        *ngFor="let option of getSelectedOptions()"
+        class="selected-item"
+        (click)="removeSelection(option.id, $event)"
+      >
+        {{ option.name }}
+        <mat-icon class="remove-icon">close</mat-icon>
+      </span>
+      <span *ngIf="getSelectedOptions().length === 0" class="placeholder">{{
+        placeholder
+      }}</span>
+    </div>
+    <mat-icon class="dropdown-icon">{{
+      isOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'
+    }}</mat-icon>
+  </div>
+
+  <div class="multiselect-dropdown" *ngIf="isOpen">
+    <div class="search-container">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input
+        #searchInput
+        type="text"
+        class="search-input"
+        [placeholder]="searchPlaceholder"
+        (input)="onSearch($event)"
+        [value]="searchTerm"
+      />
+    </div>
+
+    <div class="options-list">
+      <div
+        *ngFor="let option of filteredOptions"
+        class="option-item"
+        (click)="toggleSelection(option.id)"
+      >
+        <div class="checkbox-wrapper">
+          <div class="checkbox" [class.checked]="isSelected(option.id)">
+            <mat-icon *ngIf="isSelected(option.id)" class="check-icon"
+              >check</mat-icon
+            >
+          </div>
+        </div>
+        <span class="option-label">{{ option.name }}</span>
+      </div>
+      <div *ngIf="filteredOptions.length === 0" class="no-results">
+        Nenhum resultado encontrado
+      </div>
+    </div>
+  </div>
+</div>
+

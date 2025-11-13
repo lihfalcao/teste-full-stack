@@ -1,0 +1,132 @@
+<div class="entity-list-container">
+  <div class="entity-list-wrapper">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="page-title">Entidades</h1>
+      <button class="btn-new" (click)="goToCreate()">
+        <mat-icon>add</mat-icon>
+        Nova entidade
+      </button>
+    </div>
+
+    <!-- Card de Listagem -->
+    <div class="list-card">
+      <!-- Busca -->
+      <div class="search-container">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          placeholder="Buscar..."
+          class="search-input"
+        />
+        <button *ngIf="searchTerm" class="clear-search" (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div *ngIf="isLoading" class="loading">
+        <p>Carregando...</p>
+      </div>
+
+      <!-- Tabela -->
+      <div
+        *ngIf="!isLoading && filteredEntities.length > 0"
+        class="table-container"
+      >
+        <table class="entity-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Região</th>
+              <th>Especialidades</th>
+              <th>Ativa</th>
+              <th class="actions-column">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entity of getPaginatedEntities()">
+              <td>{{ entity.name }}</td>
+              <td>{{ entity.region }}</td>
+              <td>
+                <span
+                  *ngIf="entity.specialities && entity.specialities.length > 0"
+                >
+                  {{ formatspecialities(entity.specialities) }}
+                </span>
+                <span
+                  *ngIf="
+                    !entity.specialities || entity.specialities.length === 0
+                  "
+                  >-</span
+                >
+              </td>
+              <td>
+                <span
+                  class="status-badge"
+                  [class.active]="entity.status"
+                  [class.inactive]="!entity.status"
+                >
+                  {{ entity.status ? "Sim" : "Não" }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <button
+                  class="btn-icon view"
+                  (click)="viewEntity(entity.id)"
+                  title="Visualizar"
+                >
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button
+                  class="btn-icon edit"
+                  (click)="editEntity(entity.id)"
+                  title="Editar"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Paginação -->
+        <div class="pagination">
+          <button
+            class="page-btn"
+            (click)="previousPage()"
+            [disabled]="currentPage === 1"
+          >
+            &lt;
+          </button>
+          <span class="page-info"> 1 ... {{ currentPage }} </span>
+          <button
+            class="page-btn"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            &gt;
+          </button>
+          <button
+            class="page-btn"
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            &gt;&gt;
+          </button>
+        </div>
+      </div>
+
+      <!-- Estado vazio -->
+      <div
+        *ngIf="!isLoading && filteredEntities.length === 0"
+        class="empty-state"
+      >
+        <div class="empty-icon">☹</div>
+        <p class="empty-text">não foram encontrados resultados</p>
+      </div>
+    </div>
+  </div>
+</div>

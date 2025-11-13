@@ -1,0 +1,21 @@
+<div class="modal-overlay" *ngIf="show" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="error-icon">
+        <mat-icon>error</mat-icon>
+      </div>
+      <h2 class="modal-title">{{ title }}</h2>
+    </div>
+
+    <div class="modal-body">
+      <div class="status-info" *ngIf="status">
+        <strong>Status: {{ status }}</strong>
+      </div>
+      <p class="error-message" [innerHTML]="message"></p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-ok" (click)="onClose()">Ok</button>
+    </div>
+  </div>
+</div>

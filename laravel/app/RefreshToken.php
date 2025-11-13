@@ -1,0 +1,35 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+
+class RefreshToken extends Model
+{
+    protected $fillable = [
+        'user_id',
+        'token',
+        'expires_at',
+        'revoked',
+    ];
+
+    protected $dates = [
+        'expires_at',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function isExpired()
+    {
+        return $this->expires_at->isPast();
+    }
+
+    public function isActive()
+    {
+        return !$this->revoked && !$this->isExpired();
+    }
+}

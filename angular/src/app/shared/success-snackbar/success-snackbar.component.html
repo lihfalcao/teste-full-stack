@@ -1,0 +1,10 @@
+<div class="snackbar" *ngIf="show">
+  <div class="snackbar-content">
+    <div class="success-icon">
+      <mat-icon>check_circle</mat-icon>
+    </div>
+    <span class="snackbar-message">{{ message }}</span>
+    <button class="btn-ok" (click)="onClose()">Ok</button>
+  </div>
+</div>
+

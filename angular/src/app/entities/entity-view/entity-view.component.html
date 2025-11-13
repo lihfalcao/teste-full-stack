@@ -1,0 +1,98 @@
+<div class="entity-view-container">
+  <div class="entity-view-wrapper">
+    <div class="header">
+      <h1 class="page-title">Visualizar Entidade</h1>
+      <button class="btn-edit" (click)="editEntity()" *ngIf="entity">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+    </div>
+
+    <div class="view-card">
+      <div *ngIf="isLoading" class="loading">
+        <p>Carregando...</p>
+      </div>
+
+      <div *ngIf="!isLoading && entity" class="entity-details">
+        <div class="detail-row">
+          <div class="detail-group">
+            <label>Nome</label>
+            <p>{{ entity.name || "-" }}</p>
+          </div>
+
+          <div class="detail-group">
+            <label>Nome Fantasia</label>
+            <p>{{ entity.fantasy_name || "-" }}</p>
+          </div>
+
+          <div class="detail-group">
+            <label>CNPJ</label>
+            <p>{{ entity.cnpj || "-" }}</p>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-group">
+            <label>Especialidades</label>
+
+            <div class="specialties-line">
+              <p class="specialties-text">
+                {{ formatspecialities(entity.specialities || []) }}
+              </p>
+
+              <button
+                class="btn-more"
+                *ngIf="getRemainingSpecialties(entity.specialities || []) > 0"
+                (click)="openModal(entity.specialities || [])"
+              >
+                +{{ getRemainingSpecialties(entity.specialities || []) }}
+              </button>
+            </div>
+          </div>
+
+          <div class="detail-group">
+            <label>Regional</label>
+            <p>{{ entity.region || "-" }}</p>
+          </div>
+
+          <div class="detail-group">
+            <label>Data Inauguração</label>
+            <p>{{ formatDate(entity.inauguration_date) }}</p>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <div class="detail-group">
+            <label>Ativo</label>
+            <span
+              class="status-badge"
+              [class.active]="entity.status"
+              [class.inactive]="!entity.status"
+            >
+              {{ entity.status ? "Sim" : "Não" }}
+            </span>
+          </div>
+        </div>
+
+        <div class="detail-actions">
+          <button class="btn-back" (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+            Voltar
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && errorMessage" class="error-message">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-specialities-modal
+  *ngIf="showModal"
+  [specialities]="modalSpecialities"
+  (close)="closeModal()"
+>
+</app-specialities-modal>

@@ -1,0 +1,63 @@
+<div class="login-container">
+  <div class="login-wrapper">
+    <div class="login-card">
+      <h2 class="card-title">Login</h2>
+
+      <form [formGroup]="loginForm" class="login-form">
+        <div class="error-message" *ngIf="getErrors()">
+          <span>{{ getErrors() }}</span>
+        </div>
+        <div class="form-group">
+          <input
+            type="text"
+            formControlName="email"
+            placeholder="E-mail"
+            class="form-input"
+            [class.error]="getEmailError()"
+          />
+          <div class="error-message" *ngIf="getEmailError()">
+            <span>{{ getEmailError() }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="password-wrapper">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Senha"
+              class="form-input"
+              [class.error]="getPasswordError()"
+            />
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="togglePasswordVisibility()"
+            >
+              <mat-icon *ngIf="!showPassword">visibility</mat-icon>
+              <mat-icon *ngIf="showPassword">visibility_off</mat-icon>
+            </button>
+          </div>
+          <div class="error-message" *ngIf="getPasswordError()">
+            <span>{{ getPasswordError() }}</span>
+          </div>
+        </div>
+
+        <div class="error-message general" *ngIf="errorMessage">
+          <mat-icon>error</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <button
+          type="button"
+          class="btn-submit"
+          (click)="onSubmit()"
+          [disabled]="isLoading"
+        >
+          <span *ngIf="!isLoading">ENTRAR</span>
+          <span *ngIf="isLoading">CARREGANDO...</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

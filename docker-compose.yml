@@ -1,0 +1,62 @@
+services:
+  frontend:
+    build:
+      context: ./angular
+    ports:
+      - "8082:4200"
+    networks:
+      - teste-network
+    volumes:
+      - type: bind
+        source: ./angular
+        target: /app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  backend:
+    build:
+      context: ./laravel
+    ports:
+      - "8081:80"
+    networks:
+      - teste-network
+    depends_on:
+      - db
+    volumes:
+      - ./laravel:/var/www/html
+      - /var/www/html/vendor
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=teste_db
+      - DB_USERNAME=user
+      - DB_PASSWORD=userpassword
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root # Define a senha do root
+      MYSQL_DATABASE: teste_db # Banco de dados a ser criado
+      MYSQL_USER: user # Cria um usuário regular
+      MYSQL_PASSWORD: userpassword # Senha do usuário regular
+    ports:
+      - "3307:3306"
+    networks:
+      - teste-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8083:80"
+    networks:
+      - teste-network
+
+networks:
+  teste-network:
+    driver: bridge

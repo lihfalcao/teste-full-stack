@@ -1,0 +1,224 @@
+<div class="entity-form-container">
+  <div class="entity-form-wrapper">
+    <div class="header">
+      <h1 class="page-title">{{ pageTitle }}</h1>
+
+      <button
+        *ngIf="isEditMode"
+        class="btn-delete"
+        (click)="onDelete()"
+        type="button"
+      >
+        <mat-icon>delete</mat-icon>
+        Excluir
+      </button>
+    </div>
+
+    <div class="form-card">
+      <div *ngIf="isLoading && mode === 'edit' && !entity" class="loading">
+        <p>Carregando...</p>
+      </div>
+
+      <form
+        [formGroup]="entityForm"
+        (ngSubmit)="onSubmit()"
+        *ngIf="!(isLoading && mode === 'edit' && !entity)"
+      >
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Nome *</label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-input"
+              [class.error]="
+                entityForm.get('name')?.invalid &&
+                entityForm.get('name')?.touched
+              "
+              placeholder="AmorSaude Pinheiros"
+            />
+
+            <div
+              class="error-message"
+              *ngIf="
+                entityForm.get('name')?.invalid &&
+                entityForm.get('name')?.touched
+              "
+            >
+              <mat-icon>error</mat-icon>
+              <span>Nome é obrigatório</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="fantasy_name">Nome Fantasia *</label>
+            <input
+              type="text"
+              id="fantasy_name"
+              formControlName="fantasy_name"
+              class="form-input"
+              [class.error]="
+                entityForm.get('fantasy_name')?.invalid &&
+                entityForm.get('fantasy_name')?.touched
+              "
+              placeholder="AmorSaude Pinheiros"
+            />
+
+            <div
+              class="error-message"
+              *ngIf="
+                entityForm.get('fantasy_name')?.invalid &&
+                entityForm.get('fantasy_name')?.touched
+              "
+            >
+              <mat-icon>error</mat-icon>
+              <span>Nome Fantasia é obrigatório</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cnpj">CNPJ *</label>
+            <input
+              type="text"
+              id="cnpj"
+              formControlName="cnpj"
+              class="form-input"
+              placeholder="50.212.139/0001-77"
+              [mask]="'00.000.000/0000-00'"
+              [class.error]="
+                entityForm.get('cnpj')?.invalid &&
+                entityForm.get('cnpj')?.touched
+              "
+            />
+
+            <div
+              class="error-message"
+              *ngIf="
+                entityForm.get('cnpj')?.invalid &&
+                entityForm.get('cnpj')?.touched
+              "
+            >
+              <mat-icon>error</mat-icon>
+              <span>CNPJ inválido</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row two-columns">
+          <div class="form-group">
+            <label for="specialities">Especialidades *</label>
+
+            <app-multiselect-dropdown
+              id="specialities"
+              formControlName="specialities"
+              [options]="specialities"
+              placeholder="Selecione as especialidades..."
+              searchPlaceholder="Buscar especialidades..."
+              (selectionChange)="onspecialitiesChange($event)"
+              [class.error]="
+                entityForm.get('specialities')?.invalid &&
+                entityForm.get('specialities')?.touched
+              "
+            ></app-multiselect-dropdown>
+
+            <div
+              class="error-message"
+              *ngIf="
+                entityForm.get('specialities')?.invalid &&
+                entityForm.get('specialities')?.touched
+              "
+            >
+              <mat-icon>error</mat-icon>
+              <span>Selecione ao menos 5 especialidades</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="region">Regional *</label>
+            <select
+              id="region"
+              formControlName="region"
+              class="form-select"
+              [class.error]="
+                entityForm.get('region')?.invalid &&
+                entityForm.get('region')?.touched
+              "
+            >
+              <option value="">Selecione...</option>
+              <option *ngFor="let region of regions" [value]="region">
+                {{ region }}
+              </option>
+            </select>
+
+            <div
+              class="error-message"
+              *ngIf="
+                entityForm.get('region')?.invalid &&
+                entityForm.get('region')?.touched
+              "
+            >
+              <mat-icon>error</mat-icon>
+              <span>Regional é obrigatória</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="inauguration_date">Data Inauguração *</label>
+
+            <div class="date-input-wrapper">
+              <input
+                type="date"
+                id="inauguration_date"
+                formControlName="inauguration_date"
+                class="form-input date-input"
+                [class.error]="
+                  entityForm.get('inauguration_date')?.invalid &&
+                  entityForm.get('inauguration_date')?.touched
+                "
+              />
+            </div>
+
+            <div
+              class="error-message"
+              *ngIf="
+                entityForm.get('inauguration_date')?.invalid &&
+                entityForm.get('inauguration_date')?.touched
+              "
+            >
+              <mat-icon>error</mat-icon>
+              <span>Data de inauguração é obrigatória</span>
+            </div>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                formControlName="status"
+                class="checkbox-input"
+              />
+              <span class="status-label">Ativa</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="error-message general" *ngIf="errorMessage">
+          <mat-icon>error</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="onCancel()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn-submit" [disabled]="isLoading">
+            {{ submitButtonText }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

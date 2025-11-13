@@ -1,5 +1,10 @@
 # teste-full-stack
 
+## Dados de Login (teste)
+* email: teste@exemplo.com
+* senha: senha123
+
+
 ## Front-end
 
 Requisitos obrigatórios
