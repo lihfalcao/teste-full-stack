@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Entity, Specialty } from '../models/entity.model';
+import { Entity, Specialty, Region } from '../models/entity.model';
 
 @Injectable({
   providedIn: 'root',
@@ -51,6 +51,13 @@ export class EntityService {
   getspecialities(): Observable<Specialty[]> {
     const baseUrl = this.apiUrl.replace('/entities', '');
     return this.http.get<Specialty[]>(`${baseUrl}/specialities`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  getRegions(): Observable<Region[]> {
+    const baseUrl = this.apiUrl.replace('/entities', '');
+    return this.http.get<Region[]>(`${baseUrl}/regions`, {
       headers: this.getHeaders(),
     });
   }

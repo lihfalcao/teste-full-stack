@@ -8,7 +8,7 @@ class EntityRepository
 {
     public function list($filters)
     {
-        $query = Entity::with('specialities');
+        $query = Entity::with(['specialities', 'region']);
 
         if (!empty($filters['search'])) {
             $search = $filters['search'];
@@ -16,7 +16,9 @@ class EntityRepository
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('fantasy_name', 'like', "%{$search}%")
                   ->orWhere('cnpj', 'like', "%{$search}%")
-                  ->orWhere('region', 'like', "%{$search}%")
+                  ->orWhereHas('region', function($qr) use ($search) {
+                      $qr->where('name', 'like', "%{$search}%");
+                  })
                   ->orWhereHas('specialities', function($q) use ($search) {
                       $q->where('name', 'like', "%{$search}%");
                   });
@@ -32,8 +34,8 @@ class EntityRepository
 
         $query->orderBy($sortBy, $sortOrder);
 
-        if (!empty($filters['paginate']) && $filters['paginate'] === 'true') {
-            return $query->paginate($filters['per_page'] ?? 20);
+        if (!empty($filters['[paginate]']) && $filters['paginate'] === 'true') {
+            return $query->paginate($filters['per_page'] ?? 15);
         }
 
         return $query->get();
@@ -46,7 +48,7 @@ class EntityRepository
 
         $entity = Entity::create($data);
         $entity->specialities()->sync($specialities);
-        return $entity->load('specialities');
+        return $entity->load(['specialities', 'region']);
     }
 
     public function update($id, array $data)
@@ -58,7 +60,7 @@ class EntityRepository
         $entity->update($data);
         $entity->specialities()->sync($specialities);
 
-        return $entity->load('specialities');
+        return $entity->load(['specialities', 'region']);
     }
 
     public function delete($id)

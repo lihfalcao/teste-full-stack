@@ -135,27 +135,27 @@
           </div>
 
           <div class="form-group">
-            <label for="region">Regional *</label>
+            <label for="region_id">Regional *</label>
             <select
-              id="region"
-              formControlName="region"
+              id="region_id"
+              formControlName="region_id"
               class="form-select"
               [class.error]="
-                entityForm.get('region')?.invalid &&
-                entityForm.get('region')?.touched
+                entityForm.get('region_id')?.invalid &&
+                entityForm.get('region_id')?.touched
               "
             >
               <option value="">Selecione...</option>
-              <option *ngFor="let region of regions" [value]="region">
-                {{ region }}
+              <option *ngFor="let region of regions" [value]="region.id">
+                {{ region.name }}
               </option>
             </select>
 
             <div
               class="error-message"
               *ngIf="
-                entityForm.get('region')?.invalid &&
-                entityForm.get('region')?.touched
+                entityForm.get('region_id')?.invalid &&
+                entityForm.get('region_id')?.touched
               "
             >
               <mat-icon>error</mat-icon>

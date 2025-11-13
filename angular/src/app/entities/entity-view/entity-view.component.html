@@ -52,7 +52,9 @@
 
           <div class="detail-group">
             <label>Regional</label>
-            <p>{{ entity.region || "-" }}</p>
+            <p>
+              {{ entity.region?.name || "-" }}
+            </p>
           </div>
 
           <div class="detail-group">

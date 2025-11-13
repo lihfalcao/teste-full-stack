@@ -49,7 +49,9 @@
           <tbody>
             <tr *ngFor="let entity of getPaginatedEntities()">
               <td>{{ entity.name }}</td>
-              <td>{{ entity.region }}</td>
+              <td>
+                {{ entity.region?.name || "-" }}
+              </td>
               <td>
                 <span
                   *ngIf="entity.specialities && entity.specialities.length > 0"
@@ -92,7 +94,6 @@
           </tbody>
         </table>
 
-        <!-- Paginação -->
         <div class="pagination">
           <button
             class="page-btn"
@@ -101,7 +102,15 @@
           >
             &lt;
           </button>
-          <span class="page-info"> 1 ... {{ currentPage }} </span>
+          <span class="page-info">
+            1 ...
+            {{
+              currentPage < totalPages && currentPage !== 1
+                ? currentPage + " ... " + totalPages
+                : totalPages
+            }}
+          </span>
+
           <button
             class="page-btn"
             (click)="nextPage()"
@@ -119,7 +128,6 @@
         </div>
       </div>
 
-      <!-- Estado vazio -->
       <div
         *ngIf="!isLoading && filteredEntities.length === 0"
         class="empty-state"

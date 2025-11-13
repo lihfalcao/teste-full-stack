@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Region;
 
 class Entity extends Model
 {
@@ -13,7 +14,7 @@ class Entity extends Model
         'name',
         'fantasy_name',
         'cnpj',
-        'region',
+        'region_id',
         'inauguration_date',
         'status'
     ];
@@ -31,6 +32,11 @@ class Entity extends Model
     public function specialities()
     {
         return $this->belongsToMany(Speciality::class, 'entities_has_specialities', 'identity', 'idspeciality');
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class);
     }
 }
 

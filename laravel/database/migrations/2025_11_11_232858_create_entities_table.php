@@ -18,7 +18,8 @@ class CreateEntitiesTable extends Migration
             $table->string('name');
             $table->string('fantasy_name');
             $table->string('cnpj');
-            $table->string('region');
+            $table->unsignedInteger('region_id');
+            $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade');
             $table->date('inauguration_date');
             $table->boolean('status')->default(true);
             $table->timestamps();

@@ -3,7 +3,8 @@ export interface Entity {
   name: string;
   fantasy_name?: string;
   cnpj?: string;
-  region?: string;
+  region_id?: number;
+  region?: Region | null;
   specialities?: string[] | number[];
   inauguration_date?: Date | string;
   status: boolean;
@@ -13,6 +14,11 @@ export interface Entity {
 }
 
 export interface Specialty {
+  id: number;
+  name: string;
+}
+
+export interface Region {
   id: number;
   name: string;
 }

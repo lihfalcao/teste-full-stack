@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Speciality;
 use Illuminate\Http\Request;
 
-class SpecialtyController extends Controller
+class SpecialityController extends Controller
 {
     /**
      * Listar todas as especialidades
