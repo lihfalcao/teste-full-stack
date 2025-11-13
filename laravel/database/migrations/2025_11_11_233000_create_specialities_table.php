@@ -19,15 +19,6 @@ class CreatespecialitiesTable extends Migration
             $table->increments('id');
             $table->string('name')->unique();
         });
-
-        DB::table('specialities')->insert([
-            ['name' => 'Clínica Geral'],
-            ['name' => 'Cardiologia'],
-            ['name' => 'Pediatria'],
-            ['name' => 'Ortopedia'],
-            ['name' => 'Neurologia'],
-            ['name' => 'Dermatologia'],
-        ]);
         
     }
 
