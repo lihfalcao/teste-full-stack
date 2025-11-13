@@ -92,7 +92,7 @@ export class EntityEditComponent implements OnInit {
         this.isLoading = false;
         this.showSuccessSnackbar = true;
         setTimeout(() => {
-          this.router.navigate(['/entities']);
+          this.router.navigate(['/entidades']);
         }, 2000);
       },
       error: (error) => {
@@ -113,7 +113,7 @@ export class EntityEditComponent implements OnInit {
     this.entityService.delete(this.entityId).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/entities']);
+        this.router.navigate(['/entidades']);
       },
       error: (error) => {
         this.isLoading = false;
@@ -134,10 +134,10 @@ export class EntityEditComponent implements OnInit {
 
   closeSuccessSnackbar(): void {
     this.showSuccessSnackbar = false;
-    this.router.navigate(['/entities']);
+    this.router.navigate(['/entidades']);
   }
 
   onCancel(): void {
-    this.router.navigate(['/entities']);
+    this.router.navigate(['/entidades']);
   }
 }

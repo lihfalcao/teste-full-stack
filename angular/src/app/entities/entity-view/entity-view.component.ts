@@ -61,11 +61,11 @@ export class EntityViewComponent implements OnInit {
   }
 
   editEntity(): void {
-    this.router.navigate(['/entities/edit', this.entity.id]);
+    this.router.navigate(['/entidades/editar', this.entity.id]);
   }
 
   goBack(): void {
-    this.router.navigate(['/entities']);
+    this.router.navigate(['/entidades']);
   }
 
   formatDate(date: string | Date | undefined): string {

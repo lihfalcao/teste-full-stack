@@ -186,14 +186,14 @@ export class EntityListComponent implements OnInit {
   }
 
   goToCreate(): void {
-    this.router.navigate(['/entities/create']);
+    this.router.navigate(['/entidades/adicionar']);
   }
 
   viewEntity(id: number): void {
-    this.router.navigate(['/entities/view', id]);
+    this.router.navigate(['/entidades/visualizar', id]);
   }
 
   editEntity(id: number): void {
-    this.router.navigate(['/entities/edit', id]);
+    this.router.navigate(['/entidades/editar', id]);
   }
 }

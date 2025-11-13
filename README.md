@@ -13,6 +13,11 @@
 * docker exec -it teste-full-stack-backend-1 composer dump-autoload   
 * docker exec -it teste-full-stack-backend-1 php artisan migrate --seed
 
+## Portas
+* Angular: 8082
+* Laravel: 8081
+* phpMyAdmin: 8083
+* MySql: 3307
 
 ## Front-end
 

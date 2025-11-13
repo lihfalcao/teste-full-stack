@@ -61,7 +61,7 @@ export class EntityCreateComponent {
         this.isLoading = false;
         this.showSuccessSnackbar = true;
         setTimeout(() => {
-          this.router.navigate(['/entities']);
+          this.router.navigate(['/entidades']);
         }, 2000);
       },
       error: (error) => {
@@ -83,10 +83,10 @@ export class EntityCreateComponent {
 
   closeSuccessSnackbar(): void {
     this.showSuccessSnackbar = false;
-    this.router.navigate(['/entities']);
+    this.router.navigate(['/entidades']);
   }
 
   onCancel(): void {
-    this.router.navigate(['/entities']);
+    this.router.navigate(['/entidades']);
   }
 }

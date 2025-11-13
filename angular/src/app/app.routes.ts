@@ -17,22 +17,22 @@ export const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'entities',
+    path: 'entidades',
     component: EntityListComponent,
     canActivate: [authGuard]
   },
   {
-    path: 'entities/create',
+    path: 'entidades/adicionar',
     component: EntityCreateComponent,
     canActivate: [authGuard]
   },
   {
-    path: 'entities/edit/:id',
+    path: 'entidades/editar/:id',
     component: EntityEditComponent,
     canActivate: [authGuard]
   },
   {
-    path: 'entities/view/:id',
+    path: 'entidades/visualizar/:id',
     component: EntityViewComponent,
     canActivate: [authGuard]
   }
