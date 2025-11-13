@@ -4,6 +4,9 @@
 * email: teste@exemplo.com
 * senha: senha123
 
+## Rodar Docker para testre
+*  docker-compose up --build
+
 
 ## Front-end
 
