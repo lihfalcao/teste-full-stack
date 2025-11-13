@@ -19,7 +19,8 @@ export class EntityViewComponent implements OnInit {
     name: '',
     fantasy_name: '',
     cnpj: '',
-    region: '',
+    region_id: undefined,
+    region: null,
     inauguration_date: '',
     status: false,
     specialities: [],
@@ -45,7 +46,6 @@ export class EntityViewComponent implements OnInit {
 
     this.entityService.getById(id).subscribe({
       next: (entity) => {
-        // Garantir array sempre seguro
         entity.specialities = (entity.specialities || []).map((sp: any) =>
           typeof sp === 'string' ? sp : sp?.name || sp?.nome || String(sp)
         );

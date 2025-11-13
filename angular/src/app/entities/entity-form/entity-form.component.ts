@@ -16,7 +16,7 @@ import {
 } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { NgxMaskDirective } from 'ngx-mask';
-import { Entity, Specialty } from '../../models/entity.model';
+import { Entity, Specialty, Region } from '../../models/entity.model';
 import { EntityService } from '../../services/entity.service';
 import { MultiselectDropdownComponent } from '../../shared/multiselect-dropdown/multiselect-dropdown.component';
 
@@ -44,56 +44,47 @@ export class EntityFormComponent implements OnInit, OnChanges {
 
   entityForm!: FormGroup;
   specialities: Specialty[] = [];
-  regions = [
-    'Alto Tietê',
-    'Interior',
-    'ES',
-    'SP Interior',
-    'SP',
-    'MG',
-    'Nacional',
-    'SP CAV',
-    'RJ',
-    'SP2',
-    'SP1',
-    'NE1',
-    'NE2',
-    'SUL',
-    'Norte',
-  ];
+  regions: Region[] = [];
+  private specialitiesLoaded = false;
+  private regionsLoaded = false;
 
   constructor(private fb: FormBuilder, private entityService: EntityService) {}
 
   ngOnInit(): void {
-    this.loadspecialities();
     this.initForm();
+    this.loadRegions();
+    this.loadspecialities();
   }
 
   loadspecialities(): void {
     this.entityService.getspecialities().subscribe({
-      next: (specialities) => {
+      next: (specialities: Specialty[]) => {
         this.specialities = specialities;
-        if (this.entity && this.entityForm) {
-          this.loadEntityData();
-        }
+        this.specialitiesLoaded = true;
+        this.tryLoadEntityData();
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Erro ao carregar especialidades:', error);
+      },
+    });
+  }
+
+  loadRegions(): void {
+    this.entityService.getRegions().subscribe({
+      next: (regions: Region[]) => {
+        this.regions = regions;
+        this.regionsLoaded = true;
+        this.tryLoadEntityData();
+      },
+      error: (error: unknown) => {
+        console.error('Erro ao carregar regionais:', error);
       },
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['entity'] && this.entityForm) {
-      if (this.specialities.length > 0) {
-        this.loadEntityData();
-      } else {
-        setTimeout(() => {
-          if (this.entityForm) {
-            this.loadEntityData();
-          }
-        }, 100);
-      }
+      this.tryLoadEntityData();
     }
   }
 
@@ -102,7 +93,7 @@ export class EntityFormComponent implements OnInit, OnChanges {
       name: ['', Validators.required],
       fantasy_name: ['', Validators.required],
       cnpj: ['', [Validators.required, Validators.maxLength(18)]],
-      region: ['', Validators.required],
+      region_id: [null, Validators.required],
       inauguration_date: ['', Validators.required],
       specialities: [[], [Validators.required, Validators.minLength(5)]],
       status: [true],
@@ -114,7 +105,7 @@ export class EntityFormComponent implements OnInit, OnChanges {
   }
 
   loadEntityData(): void {
-    if (this.entity) {
+    if (this.entity && this.specialitiesLoaded && this.regionsLoaded) {
       let specialitiesIds: number[] = [];
       if (
         this.entity.specialities &&
@@ -141,12 +132,33 @@ export class EntityFormComponent implements OnInit, OnChanges {
         }
       }
 
+      let regionId: number | null = null;
+
+      if (typeof this.entity.region_id === 'number') {
+        regionId = this.entity.region_id;
+      } else if (
+        this.entity.region &&
+        typeof this.entity.region === 'object' &&
+        this.entity.region !== null &&
+        'id' in this.entity.region
+      ) {
+        regionId = Number(this.entity.region.id);
+      } else if (
+        this.entity.region &&
+        typeof this.entity.region === 'string'
+      ) {
+        const foundRegion = this.regions.find(
+          (region) => region.name === this.entity!.region
+        );
+        regionId = foundRegion ? foundRegion.id : null;
+      }
+
       this.entityForm.patchValue({
         name: this.entity.name || '',
         fantasy_name: this.entity.fantasy_name || '',
         cnpj: this.entity.cnpj || '',
         specialities: specialitiesIds,
-        region: this.entity.region || '',
+        region_id: regionId,
         inauguration_date: this.entity.inauguration_date
           ? this.formatDateForInput(this.entity.inauguration_date)
           : '',
@@ -169,6 +181,10 @@ export class EntityFormComponent implements OnInit, OnChanges {
 
     if (formValue.specialities && !Array.isArray(formValue.specialities)) {
       formValue.specialities = [formValue.specialities];
+    }
+
+    if (formValue.region_id) {
+      formValue.region_id = Number(formValue.region_id);
     }
 
     this.submitForm.emit(formValue);
@@ -204,5 +220,13 @@ export class EntityFormComponent implements OnInit, OnChanges {
       return this.isEditMode ? 'Salvando...' : 'Salvando...';
     }
     return this.isEditMode ? 'Editar' : 'Salvar';
+  }
+
+  private tryLoadEntityData(): void {
+    if (this.entity && this.entityForm) {
+      if (this.specialitiesLoaded && this.regionsLoaded) {
+        this.loadEntityData();
+      }
+    }
   }
 }

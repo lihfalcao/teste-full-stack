@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Entity;
 use App\Speciality;
+use App\Region;
 
 class EntitySeeder extends Seeder
 {
@@ -23,7 +24,7 @@ class EntitySeeder extends Seeder
                 'name' => 'Hospital São Paulo',
                 'fantasy_name' => 'HSP',
                 'cnpj' => '12.345.678/0001-90',
-                'region' => 'SUDESTE',
+                'region' => 'SUL',
                 'inauguration_date' => '2020-01-15',
                 'status' => true,
             ],
@@ -31,13 +32,20 @@ class EntitySeeder extends Seeder
                 'name' => 'Clínica Médica Central',
                 'fantasy_name' => 'CMC',
                 'cnpj' => '98.765.432/0001-10',
-                'region' => 'NORTE',
+                'region' => 'Norte',
                 'inauguration_date' => '2019-03-20',
                 'status' => false,
             ]
         ];
 
         foreach ($entitiesData as $data) {
+            $regionName = $data['region'] ?? 'Não informado';
+            unset($data['region']);
+
+            $region = Region::firstOrCreate(['name' => $regionName]);
+
+            $data['region_id'] = $region->id;
+
             $entity = Entity::create($data);
 
             $randSpecs = collect($allSpecs)->shuffle()->take(rand(5, 8))->toArray();

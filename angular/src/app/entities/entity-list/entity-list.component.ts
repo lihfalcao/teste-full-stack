@@ -44,7 +44,6 @@ export class EntityListComponent implements OnInit {
     this.entityService.getAll().subscribe({
       next: (data) => {
         this.entities = data.map((entity: Entity) => {
-          // Mantido igual ao seu código
           if (entity.specialities) {
             if (Array.isArray(entity.specialities)) {
               entity.specialities = entity.specialities.map((sp: any) => {
@@ -87,9 +86,14 @@ export class EntityListComponent implements OnInit {
           entity.specialities
         ).toLowerCase();
 
+        const regionName =
+          typeof entity.region === 'string'
+            ? entity.region
+            : entity.region?.name || '';
+
         return (
           entity.name?.toLowerCase().includes(search) ||
-          entity.region?.toLowerCase().includes(search) ||
+          regionName.toLowerCase().includes(search) ||
           specialities.includes(search)
         );
       });
@@ -117,12 +121,33 @@ export class EntityListComponent implements OnInit {
     if (!this.sortColumn || !this.sortDirection) return;
 
     this.filteredEntities.sort((a: any, b: any) => {
-      const A = a[this.sortColumn as keyof Entity] ?? '';
-      const B = b[this.sortColumn as keyof Entity] ?? '';
+      const getComparable = (entity: any): string => {
+        if (this.sortColumn === 'region') {
+          if (typeof entity.region === 'string') {
+            return entity.region || '';
+          }
+          return entity.region?.name || '';
+        }
+
+        const value = entity[this.sortColumn as keyof Entity];
+
+        if (value === undefined || value === null) {
+          return '';
+        }
+
+        if (typeof value === 'string') {
+          return value;
+        }
+
+        return String(value);
+      };
+
+      const A = getComparable(a);
+      const B = getComparable(b);
 
       return this.sortDirection === 'asc'
-        ? A.localeCompare(B)
-        : B.localeCompare(A);
+        ? A.localeCompare(B, 'pt-BR')
+        : B.localeCompare(A, 'pt-BR');
     });
   }
 
