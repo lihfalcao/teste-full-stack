@@ -7,6 +7,11 @@
 ## Rodar Docker para testre
 *  docker-compose up --build
 
+## Comandos para banco de dados
+* Se necessário para saber o nome do banco rodar docker ps
+* docker exec -it teste-full-stack-backend-1 php artisan migrate
+* docker exec -it teste-full-stack-backend-1 php artisan migrate --seed
+
 
 ## Front-end
 
