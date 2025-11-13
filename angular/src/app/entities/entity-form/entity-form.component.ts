@@ -93,7 +93,7 @@ export class EntityFormComponent implements OnInit, OnChanges {
       name: ['', Validators.required],
       fantasy_name: ['', Validators.required],
       cnpj: ['', [Validators.required, Validators.maxLength(18)]],
-      region_id: [null, Validators.required],
+      region_id: ['', Validators.required],
       inauguration_date: ['', Validators.required],
       specialities: [[], [Validators.required, Validators.minLength(5)]],
       status: [true],
@@ -107,50 +107,17 @@ export class EntityFormComponent implements OnInit, OnChanges {
   loadEntityData(): void {
     if (this.entity && this.specialitiesLoaded && this.regionsLoaded) {
       let specialitiesIds: number[] = [];
-      if (
-        this.entity.specialities &&
-        Array.isArray(this.entity.specialities) &&
-        this.entity.specialities.length > 0
-      ) {
-        if (
-          typeof this.entity.specialities[0] === 'object' &&
-          this.entity.specialities[0] !== null
-        ) {
-          specialitiesIds = this.entity.specialities
-            .map((sp: any) => {
-              return typeof sp === 'object' && sp.id ? sp.id : sp;
-            })
-            .filter((id: any) => typeof id === 'number');
-        } else if (typeof this.entity.specialities[0] === 'string') {
-          specialitiesIds = this.specialities
-            .filter((sp) =>
-              (this.entity!.specialities as string[]).includes(sp.name)
-            )
-            .map((sp) => sp.id);
-        } else if (typeof this.entity.specialities[0] === 'number') {
-          specialitiesIds = this.entity.specialities as number[];
-        }
+
+      if (this.entity.specialities && Array.isArray(this.entity.specialities)) {
+        specialitiesIds = this.entity.specialities.map((sp: any) => sp.id);
       }
 
       let regionId: number | null = null;
 
       if (typeof this.entity.region_id === 'number') {
         regionId = this.entity.region_id;
-      } else if (
-        this.entity.region &&
-        typeof this.entity.region === 'object' &&
-        this.entity.region !== null &&
-        'id' in this.entity.region
-      ) {
+      } else if (this.entity.region && typeof this.entity.region === 'object') {
         regionId = Number(this.entity.region.id);
-      } else if (
-        this.entity.region &&
-        typeof this.entity.region === 'string'
-      ) {
-        const foundRegion = this.regions.find(
-          (region) => region.name === this.entity!.region
-        );
-        regionId = foundRegion ? foundRegion.id : null;
       }
 
       this.entityForm.patchValue({

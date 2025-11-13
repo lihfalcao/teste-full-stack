@@ -53,11 +53,7 @@
           <div class="detail-group">
             <label>Regional</label>
             <p>
-              {{
-                typeof entity.region === "string"
-                  ? entity.region
-                  : entity.region?.name || "-"
-              }}
+              {{ entity.region?.name || "-" }}
             </p>
           </div>
 

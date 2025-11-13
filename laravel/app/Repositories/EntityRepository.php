@@ -34,8 +34,8 @@ class EntityRepository
 
         $query->orderBy($sortBy, $sortOrder);
 
-        if (!empty($filters['paginate']) && $filters['paginate'] === 'true') {
-            return $query->paginate($filters['per_page'] ?? 20);
+        if (!empty($filters['[paginate]']) && $filters['paginate'] === 'true') {
+            return $query->paginate($filters['per_page'] ?? 15);
         }
 
         return $query->get();

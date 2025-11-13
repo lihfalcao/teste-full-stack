@@ -20,7 +20,6 @@ export class EntityViewComponent implements OnInit {
     fantasy_name: '',
     cnpj: '',
     region_id: undefined,
-    region: null,
     inauguration_date: '',
     status: false,
     specialities: [],
@@ -80,9 +79,7 @@ export class EntityViewComponent implements OnInit {
     if (!specs || specs.length === 0) return '-';
 
     const names = specs
-      .map((sp) =>
-        typeof sp === 'string' ? sp : sp?.name || sp?.nome || String(sp)
-      )
+      .map((sp) => (typeof sp === 'string' ? sp : sp?.name || String(sp)))
       .filter(Boolean)
       .sort((a, b) => a.localeCompare(b, 'pt-BR'));
 

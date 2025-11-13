@@ -4,7 +4,7 @@ export interface Entity {
   fantasy_name?: string;
   cnpj?: string;
   region_id?: number;
-  region?: Region | string | null;
+  region?: Region | null;
   specialities?: string[] | number[];
   inauguration_date?: Date | string;
   status: boolean;

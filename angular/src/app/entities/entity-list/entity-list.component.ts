@@ -26,7 +26,7 @@ export class EntityListComponent implements OnInit {
   sortDirection: 'asc' | 'desc' | null = null;
 
   currentPage: number = 1;
-  itemsPerPage: number = 20;
+  itemsPerPage: number = 15;
   totalPages: number = 0;
 
   constructor(private entityService: EntityService, private router: Router) {}
